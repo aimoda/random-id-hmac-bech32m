@@ -6,6 +6,22 @@ Not cryptographically audited. Likely vulnerable to timing attacks, which may or
 
 ## Example
 
+### Installing
+
+#### Installing with npm
+
+```sh
+npm i @aimoda/random-id-hmac-bech32m
+```
+
+#### Installing with yarn
+
+```sh
+yarn add @aimoda/random-id-hmac-bech32m
+```
+
+### Usage with JavaScript
+
 ```javascript
 const key = crypto.getRandomValues(new Uint8Array(20)); // 20*8 = 160 for SHA-1
 const importedKey = await crypto.subtle.importKey('raw', key, { name: 'HMAC', hash: 'SHA-1' }, true, ['sign']);
@@ -16,7 +32,7 @@ const validated_result = await verifyRandomIDwithHMACinBech32m(importedKey, enco
 console.log(validated_result); // Example: true
 ```
 
-### Example with Cloudflare Workers
+### Usage with Cloudflare Workers
 
 ```toml
 name = "download-worker-dev"
