@@ -1,0 +1,12 @@
+# ignore node_modules directory
+node_modules
+
+# ignore compiled files
+/dist
+/lib
+*.js
+
+# ignore typescript cache
+*.tsbuildinfo
+
+yarn.lock
