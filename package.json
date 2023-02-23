@@ -1,6 +1,6 @@
 {
   "name": "@aimoda/random-id-hmac-bech32m",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "A utility library for generating and verifying random IDs with HMAC in Bech32m format",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
