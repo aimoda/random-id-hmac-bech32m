@@ -33,10 +33,9 @@ export async function generateRandomIDwithHMACinBech32m(
 export async function verifyRandomIDwithHMACinBech32m(
   signing_key: CryptoKey,
   random_id_and_signature_bech32m: string,
-  hash_algo: string = "SHA-1"
+  hash_algo: string = "SHA-1",
+  expected_prefix?: string
 ): Promise<boolean> {
-  const { prefix, words } = bech32m.decode(random_id_and_signature_bech32m);
-  const random_id_and_signature = new Uint8Array(bech32m.fromWords(words));
   const key_length =
     signing_key.algorithm.name === "HMAC" && hash_algo === "SHA-1"
       ? 20
@@ -46,18 +45,30 @@ export async function verifyRandomIDwithHMACinBech32m(
   if (key_length === null) {
     throw new Error("Unsupported HMAC algorithm or key");
   }
-  const random_id = random_id_and_signature.slice(0, -key_length);
 
-  const real_signature = await generateRandomIDwithHMACinBech32m(
-    signing_key,
-    prefix,
-    random_id.byteLength,
-    random_id_and_signature_bech32m.length,
-    random_id
-  );
+  try {
+    const { prefix, words } = bech32m.decode(random_id_and_signature_bech32m);
 
-  if (real_signature === random_id_and_signature_bech32m) {
-    return true;
+    if (expected_prefix && expected_prefix !== prefix) throw new Error("Prefix mismatch");
+
+    const random_id_and_signature = new Uint8Array(bech32m.fromWords(words));
+    const random_id = random_id_and_signature.slice(0, -key_length);
+
+    const real_signature = await generateRandomIDwithHMACinBech32m(
+      signing_key,
+      prefix,
+      random_id.byteLength,
+      random_id_and_signature_bech32m.length,
+      random_id
+    );
+
+    if (real_signature === random_id_and_signature_bech32m) {
+      return true;
+    }
+  }
+  catch (e) {
+    console.error(e);
+    return false;
   }
 
   return false;
