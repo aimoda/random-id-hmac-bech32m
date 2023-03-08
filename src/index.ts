@@ -61,8 +61,13 @@ export async function verifyRandomIDwithHMACinBech32m(
       random_id_and_signature_bech32m.length,
       random_id
     );
-
-    if (real_signature === random_id_and_signature_bech32m) {
+    if(typeof crypto.subtle.timingSafeEqual) {
+      const real_signature_bytes = new TextEncoder().encode(real_signature);
+      const random_id_and_signature_bech32m_bytes = new TextEncoder().encode(random_id_and_signature_bech32m);
+      return crypto.subtle.timingSafeEqual(real_signature_bytes, random_id_and_signature_bech32m_bytes);
+    }
+    else if (real_signature === random_id_and_signature_bech32m) {
+      console.warn("crypto.subtle.timingSafeEqual is not available, using string comparison instead");
       return true;
     }
   }
