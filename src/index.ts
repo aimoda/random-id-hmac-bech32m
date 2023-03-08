@@ -47,7 +47,7 @@ export async function verifyRandomIDwithHMACinBech32m(
   }
 
   try {
-    const { prefix, words } = bech32m.decode(random_id_and_signature_bech32m);
+    const { prefix, words } = bech32m.decode(random_id_and_signature_bech32m, random_id_and_signature_bech32m.length);
 
     if (expected_prefix && expected_prefix !== prefix) throw new Error("Prefix mismatch");
 
