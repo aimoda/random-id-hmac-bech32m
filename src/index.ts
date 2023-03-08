@@ -58,7 +58,7 @@ export async function verifyRandomIDwithHMACinBech32m(
       signing_key,
       prefix,
       random_id.byteLength,
-      random_id_and_signature_bech32m.length + prefix.length,
+      random_id_and_signature_bech32m.length,
       random_id
     );
     if(typeof crypto.subtle.timingSafeEqual) {
